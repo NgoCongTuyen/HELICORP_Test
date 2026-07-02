@@ -26,6 +26,10 @@ body {
   background: radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 30%), #f8fbff;
 }
 
+.theme-dark body {
+  background: radial-gradient(circle at top, rgba(56, 189, 248, 0.16), transparent 30%), #020617;
+}
+
 img {
   max-width: 100%;
   display: block;
@@ -127,8 +131,18 @@ input {
 .hero p {
   margin: 1.6rem 0 2rem;
   max-width: 640px;
-  opacity: 0.88;
+  color: #1f2937;
+  opacity: 1;
   line-height: 1.75;
+}
+
+.theme-dark .hero p,
+.theme-dark .section-copy p,
+.theme-dark .newsletter-card p,
+.theme-dark .gallery-card p,
+.theme-dark .feature-card p {
+  color: #e2e8f0;
+  opacity: 1;
 }
 
 .hero-actions {
@@ -184,6 +198,13 @@ input {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: 0 30px 90px rgba(15, 23, 42, 0.12);
+}
+
+.hero-image {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 24px;
 }
 
 .theme-dark .device-shell {
@@ -242,6 +263,52 @@ input {
   text-align: center;
 }
 
+.gallery-section {
+  padding-top: 0;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.gallery-card {
+  padding: 1.75rem;
+  border-radius: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.95);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.theme-dark .gallery-card {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.gallery-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(14, 165, 233, 0.28);
+}
+
+.gallery-media {
+  height: 200px;
+  margin-bottom: 1.25rem;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(56, 189, 248, 0.1));
+}
+
+.footer-section {
+  text-align: center;
+  padding: 2rem 2rem 4rem;
+  opacity: 1;
+  color: #334155;
+}
+
+.theme-dark .footer-section {
+  color: #e2e8f0;
+}
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -285,7 +352,8 @@ input {
 .feature-card p {
   margin: 0;
   line-height: 1.8;
-  opacity: 0.92;
+  color: #475569;
+  opacity: 1;
 }
 
 .section-split {
@@ -302,7 +370,8 @@ input {
 .section-copy p {
   line-height: 1.8;
   margin-bottom: 1.8rem;
-  opacity: 0.9;
+  color: #334155;
+  opacity: 1;
 }
 
 .spec-list {
