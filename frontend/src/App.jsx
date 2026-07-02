@@ -3,13 +3,10 @@ import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
 import Features from './components/Features.jsx';
 import Gallery from './components/Gallery.jsx';
+import DealCalculator from './components/DealCalculator.jsx';
 import Specifications from './components/Specifications.jsx';
 import NewsletterForm from './components/NewsletterForm.jsx';
 import Footer from './components/Footer.jsx';
-
-const apiBase = import.meta.env.VITE_API_URL || '/api';
-const analyticsEndpoint = `${apiBase}/analytics`;
-const newsletterEndpoint = `${apiBase}/newsletter`;
 
 const features = [
   {
@@ -54,20 +51,12 @@ const aiReplies = {
 };
 
 function sendAnalytics(eventType, payload = {}) {
-  const payloadObject = { eventType, timestamp: new Date().toISOString(), ...payload };
-  const body = JSON.stringify(payloadObject);
-
-  if (navigator.sendBeacon) {
-    const blob = new Blob([body], { type: 'application/json' });
-    navigator.sendBeacon(analyticsEndpoint, blob);
-    return;
-  }
-
-  fetch(analyticsEndpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body,
-  }).catch(() => null);
+  const info = {
+    eventType,
+    timestamp: new Date().toISOString(),
+    ...payload,
+  };
+  console.debug('Analytics event:', info);
 }
 
 function App() {
@@ -107,50 +96,29 @@ function App() {
     []
   );
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (!email || !email.includes('@')) {
       setStatus('Vui lòng nhập email hợp lệ.');
       return;
     }
-    setStatus('Đang gửi...');
     sendAnalytics('newsletter-submit', { email });
-    try {
-      const response = await fetch(newsletterEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.message || 'Lỗi server');
-      }
-      setStatus('Đăng ký thành công! Cảm ơn bạn đã quan tâm.');
-      setEmail('');
-    } catch (error) {
-      setStatus('Gửi thất bại. Vui lòng thử lại sau.');
-    }
+    setStatus('Đăng ký thành công! Cảm ơn bạn đã quan tâm.');
+    localStorage.setItem('newsletter-email', email);
+    setEmail('');
   };
 
-  const handleChatSend = async (text) => {
+  const handleChatSend = (text) => {
     if (!text.trim()) return;
     const userMessage = { id: Date.now(), author: 'user', text: text.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     sendAnalytics('chat-message', { question: text });
 
-    try {
-      const response = await fetch(`${apiBase}/ai-response`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text.trim() }),
-      });
-      const data = await response.json();
-      const replyText = data.success ? data.answer : 'Xin lỗi, tôi không trả lời được lúc này.';
-      setMessages((prev) => [...prev, { id: Date.now() + 1, author: 'bot', text: replyText }]);
-    } catch (error) {
-      setMessages((prev) => [...prev, { id: Date.now() + 1, author: 'bot', text: 'Có lỗi khi liên hệ AI. Vui lòng thử lại.' }]);
-    }
+    const normalized = text.trim().toLowerCase();
+    const matched = Object.keys(aiReplies).find((key) => normalized.includes(key));
+    const replyText = aiReplies[matched] || aiReplies.default;
+    setMessages((prev) => [...prev, { id: Date.now() + 1, author: 'bot', text: replyText }]);
   };
 
   return (
@@ -160,6 +128,7 @@ function App() {
         <Hero heroStyles={heroStyles} />
         <Features features={features} />
         <Gallery />
+        <DealCalculator price={32990000} />
         <Specifications specs={specs} />
         <NewsletterForm
           email={email}
