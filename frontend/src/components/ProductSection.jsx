@@ -2,7 +2,9 @@ function formatPrice(value) {
   return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 }
 
-export default function ProductSection({ products, isLoading, favorites, cart, viewed, onToggleFavorite, onAddToCart, onViewProduct, onShowCart, onShowFavorites }) {
+import React from 'react';
+
+function ProductSection({ products, isLoading, favorites, cart, viewed, onToggleFavorite, onAddToCart, onViewProduct, onShowCart, onShowFavorites }) {
   return (
     <section className="section product-section">
       <div className="section-intro">
@@ -35,15 +37,16 @@ export default function ProductSection({ products, isLoading, favorites, cart, v
             products.map((product) => (
               <article key={product.id} className="product-card animate-float" onMouseEnter={() => onViewProduct(product.name)}>
                 <div className="product-tag">{product.tag}</div>
-                <img
-                  className="product-image"
-                  src={product.image}
-                  alt={product.name}
-                  loading="lazy"
-                  decoding="async"
-                  width="600"
-                  height="400"
-                />
+                {(() => {
+                  const base = product.image.split('/').pop().split('.')[0];
+                  return (
+                    <picture>
+                      <source type="image/avif" srcSet={`/images/optimized/${base}-320.avif 320w, /images/optimized/${base}-640.avif 640w, /images/optimized/${base}-1024.avif 1024w`} sizes="(max-width:600px) 100vw, 420px" />
+                      <source type="image/webp" srcSet={`/images/optimized/${base}-320.webp 320w, /images/optimized/${base}-640.webp 640w, /images/optimized/${base}-1024.webp 1024w`} sizes="(max-width:600px) 100vw, 420px" />
+                      <img className="product-image" src={`/images/optimized/${base}-640.webp`} alt={product.name} loading="lazy" decoding="async" />
+                    </picture>
+                  );
+                })()}
                 <div className="product-copy">
                   <h3>{product.name}</h3>
                   <p>{product.description}</p>
@@ -64,3 +67,5 @@ export default function ProductSection({ products, isLoading, favorites, cart, v
     </section>
   );
 }
+
+export default React.memo(ProductSection);

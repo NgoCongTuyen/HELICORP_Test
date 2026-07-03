@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "start": "vite --host 0.0.0.0 --port 4173",
+    "optimize-images": "node scripts/optimize-images.cjs",
     "build": "vite build",
     "preview": "vite preview"
   },

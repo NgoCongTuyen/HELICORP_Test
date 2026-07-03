@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
 import Features from './components/Features.jsx';
@@ -140,12 +140,6 @@ function App() {
   }, [darkMode]);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('theme-dark', darkMode);
-    localStorage.setItem('smartvision-dark', darkMode);
-    sendAnalytics('theme-toggle', { darkMode });
-  }, [darkMode]);
-
-  useEffect(() => {
     const handleScroll = () => {
       sendAnalytics('scroll', { scrollY: window.scrollY });
       setHeroOffset(window.scrollY * 0.08);
@@ -168,22 +162,40 @@ function App() {
     setViewed(savedViewed);
   }, []);
 
+  // Schedule localStorage writes using requestIdleCallback to avoid blocking main thread
+  const scheduleWrite = useCallback((key, value) => {
+    if (typeof window === 'undefined') return;
+    const write = () => {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        // ignore quota errors
+      }
+    };
+    if ('requestIdleCallback' in window) {
+      // @ts-ignore
+      requestIdleCallback(write, { timeout: 2000 });
+    } else {
+      setTimeout(write, 300);
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => setProductLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('smartvision-favorites', JSON.stringify(favorites));
-  }, [favorites]);
+    scheduleWrite('smartvision-favorites', favorites);
+  }, [favorites, scheduleWrite]);
 
   useEffect(() => {
-    localStorage.setItem('smartvision-cart', JSON.stringify(cart));
-  }, [cart]);
+    scheduleWrite('smartvision-cart', cart);
+  }, [cart, scheduleWrite]);
 
   useEffect(() => {
-    localStorage.setItem('smartvision-viewed', JSON.stringify(viewed));
-  }, [viewed]);
+    scheduleWrite('smartvision-viewed', viewed);
+  }, [viewed, scheduleWrite]);
 
   useEffect(() => {
     if (page === 'favorites' && favoritesSectionRef.current) {
@@ -194,14 +206,37 @@ function App() {
     }
   }, [page]);
 
-  const favoriteProducts = products.filter((product) => favorites.includes(product.id));
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const cartItems = cart
-    .map((item) => {
-      const product = products.find((product) => product.id === item.id);
-      return product ? { ...product, quantity: item.quantity } : null;
-    })
-    .filter(Boolean);
+  // Memoize derived values to avoid unnecessary recomputation on every render
+  const memoFavoriteProducts = useMemo(() => products.filter((product) => favorites.includes(product.id)), [products, favorites]);
+  const memoCartCount = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
+  const memoCartItems = useMemo(
+    () =>
+      cart
+        .map((item) => {
+          const product = products.find((product) => product.id === item.id);
+          return product ? { ...product, quantity: item.quantity } : null;
+        })
+        .filter(Boolean),
+    [cart, products]
+  );
+
+  const handleToggleFavorite = useCallback((id) => {
+    setFavorites((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
+  }, []);
+
+  const handleAddToCart = useCallback((id) => {
+    setCart((prev) => {
+      const exists = prev.find((item) => item.id === id);
+      if (exists) {
+        return prev.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
+      }
+      return [...prev, { id, quantity: 1 }];
+    });
+  }, []);
+
+  const handleViewProduct = useCallback((name) => {
+    setViewed((prev) => [name, ...prev.filter((item) => item !== name)].slice(0, 5));
+  }, []);
 
   const heroStyles = useMemo(
     () => ({
@@ -217,6 +252,13 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  const navigateToCb = useCallback((target) => {
+    setPage(target);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -249,7 +291,7 @@ function App() {
         darkMode={darkMode}
         onToggle={() => setDarkMode((prev) => !prev)}
         favoritesCount={favorites.length}
-        cartCount={cartCount}
+        cartCount={memoCartCount}
         page={page}
         onShowFavorites={() => navigateTo('favorites')}
         onShowCart={() => navigateTo('cart')}
@@ -281,25 +323,11 @@ function App() {
               favorites={favorites}
               cart={cart}
               viewed={viewed}
-              onToggleFavorite={(id) => {
-                setFavorites((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
-              }}
-              onAddToCart={(id) => {
-                setCart((prev) => {
-                  const exists = prev.find((item) => item.id === id);
-                  if (exists) {
-                    return prev.map((item) =>
-                      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-                    );
-                  }
-                  return [...prev, { id, quantity: 1 }];
-                });
-              }}
-              onViewProduct={(name) => {
-                setViewed((prev) => [name, ...prev.filter((item) => item !== name)].slice(0, 5));
-              }}
-              onShowCart={() => setPage('cart')}
-              onShowFavorites={() => setPage('favorites')}
+              onToggleFavorite={(id) => handleToggleFavorite(id)}
+              onAddToCart={(id) => handleAddToCart(id)}
+              onViewProduct={(name) => handleViewProduct(name)}
+              onShowCart={() => navigateToCb('cart')}
+              onShowFavorites={() => navigateToCb('favorites')}
             />
             <DealCalculator price={32990000} />
             <Specifications specs={specs} />
@@ -318,11 +346,20 @@ function App() {
               <h2>Sản phẩm bạn đã lưu</h2>
               <p>Đây là danh sách các sản phẩm đã được thêm vào yêu thích của bạn.</p>
             </div>
-            {favoriteProducts.length > 0 ? (
+            {memoFavoriteProducts.length > 0 ? (
               <div className="product-grid favorite-grid">
-                {favoriteProducts.map((product) => (
+                {memoFavoriteProducts.map((product) => (
                   <article key={product.id} className="product-card">
-                      <img className="product-image" src={product.image} alt={product.name} loading="lazy" decoding="async" width="600" height="400" />
+                      {(() => {
+                        const base = product.image.split('/').pop().split('.')[0];
+                        return (
+                          <picture>
+                            <source type="image/avif" srcSet={`/images/optimized/${base}-320.avif 320w, /images/optimized/${base}-640.avif 640w, /images/optimized/${base}-1024.avif 1024w`} sizes="(max-width:600px) 100vw, 600px" />
+                            <source type="image/webp" srcSet={`/images/optimized/${base}-320.webp 320w, /images/optimized/${base}-640.webp 640w, /images/optimized/${base}-1024.webp 1024w`} sizes="(max-width:600px) 100vw, 600px" />
+                            <img className="product-image" src={`/images/optimized/${base}-640.webp`} alt={product.name} loading="lazy" decoding="async" width="600" height="400" />
+                          </picture>
+                        );
+                      })()}
                     <div className="product-copy">
                       <h3>{product.name}</h3>
                       <p>{product.description}</p>
@@ -356,11 +393,20 @@ function App() {
               <h2>Sản phẩm trong giỏ của bạn</h2>
               <p>Xem các sản phẩm đang nằm trong giỏ và chuẩn bị thanh toán.</p>
             </div>
-            {cartItems.length > 0 ? (
+            {memoCartItems.length > 0 ? (
               <div className="product-grid cart-grid">
-                {cartItems.map((product) => (
+                {memoCartItems.map((product) => (
                   <article key={product.id} className="product-card">
-                      <img className="product-image" src={product.image} alt={product.name} loading="lazy" decoding="async" width="600" height="400" />
+                      {(() => {
+                        const base = product.image.split('/').pop().split('.')[0];
+                        return (
+                          <picture>
+                            <source type="image/avif" srcSet={`/images/optimized/${base}-320.avif 320w, /images/optimized/${base}-640.avif 640w, /images/optimized/${base}-1024.avif 1024w`} sizes="(max-width:600px) 100vw, 600px" />
+                            <source type="image/webp" srcSet={`/images/optimized/${base}-320.webp 320w, /images/optimized/${base}-640.webp 640w, /images/optimized/${base}-1024.webp 1024w`} sizes="(max-width:600px) 100vw, 600px" />
+                            <img className="product-image" src={`/images/optimized/${base}-640.webp`} alt={product.name} loading="lazy" decoding="async" width="600" height="400" />
+                          </picture>
+                        );
+                      })()}
                     <div className="product-copy">
                       <h3>{product.name}</h3>
                       <p>{product.description}</p>

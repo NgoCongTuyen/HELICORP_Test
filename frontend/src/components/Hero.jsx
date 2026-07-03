@@ -12,15 +12,11 @@ export default function Hero({ heroStyles }) {
       </div>
       <div className="hero-card" aria-label="Phone preview">
         <div className="device-shell">
-          <img
-            src="/images/iphone16.jpg"
-            alt="iPhone 16 Pro Max"
-            className="hero-image"
-            loading="eager"
-            width="700"
-            height="420"
-            decoding="sync"
-          />
+          <picture>
+            <source type="image/avif" srcSet="/images/optimized/iphone16-320.avif 320w, /images/optimized/iphone16-640.avif 640w, /images/optimized/iphone16-1024.avif 1024w, /images/optimized/iphone16-1600.avif 1600w" sizes="(max-width:600px) 100vw, 700px" />
+            <source type="image/webp" srcSet="/images/optimized/iphone16-320.webp 320w, /images/optimized/iphone16-640.webp 640w, /images/optimized/iphone16-1024.webp 1024w, /images/optimized/iphone16-1600.webp 1600w" sizes="(max-width:600px) 100vw, 700px" />
+            <img src="/images/optimized/iphone16-1024.webp" alt="iPhone 16 Pro Max" className="hero-image" loading="eager" width="700" height="420" decoding="sync" />
+          </picture>
         </div>
       </div>
     </section>
