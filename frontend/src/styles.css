@@ -1255,4 +1255,38 @@ input {
     bottom: 1rem;
     width: calc(100% - 2rem);
   }
+
+  /* Mobile performance: remove heavy visual effects that cause repaints */
+  .topbar {
+    backdrop-filter: none;
+    background: rgba(255,255,255,0.96);
+    box-shadow: none;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  .theme-dark .topbar {
+    background: rgba(5,12,30,0.98);
+    border-color: rgba(148,163,184,0.06);
+  }
+
+  .device-shell,
+  .product-card {
+    box-shadow: none;
+    border-radius: 20px;
+  }
+
+  /* Prefer simple backgrounds and avoid backdrop-filter on mobile */
+  .hero::before {
+    display: none;
+  }
+
+  /* Reserve image aspect ratio to avoid layout shifts */
+  .hero-image,
+  .product-image,
+  .gallery-media {
+    aspect-ratio: 16/10;
+    height: auto;
+    max-height: 60vh;
+    object-fit: cover;
+  }
 }

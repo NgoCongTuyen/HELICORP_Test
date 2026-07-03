@@ -322,7 +322,7 @@ function App() {
               <div className="product-grid favorite-grid">
                 {favoriteProducts.map((product) => (
                   <article key={product.id} className="product-card">
-                    <img className="product-image" src={product.image} alt={product.name} />
+                      <img className="product-image" src={product.image} alt={product.name} loading="lazy" decoding="async" width="600" height="400" />
                     <div className="product-copy">
                       <h3>{product.name}</h3>
                       <p>{product.description}</p>
@@ -360,7 +360,7 @@ function App() {
               <div className="product-grid cart-grid">
                 {cartItems.map((product) => (
                   <article key={product.id} className="product-card">
-                    <img className="product-image" src={product.image} alt={product.name} />
+                      <img className="product-image" src={product.image} alt={product.name} loading="lazy" decoding="async" width="600" height="400" />
                     <div className="product-copy">
                       <h3>{product.name}</h3>
                       <p>{product.description}</p>

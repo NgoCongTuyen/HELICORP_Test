@@ -17,6 +17,9 @@ export default function Hero({ heroStyles }) {
             alt="iPhone 16 Pro Max"
             className="hero-image"
             loading="eager"
+            width="700"
+            height="420"
+            decoding="sync"
           />
         </div>
       </div>
