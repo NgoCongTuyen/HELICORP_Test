@@ -1,51 +1,36 @@
-# SmartVision Pro - React Landing Page
+# HELICORP_Bai_Test
 
-Dự án được tách thành hai phần:
+Dự án này là một landing page React chạy với Vite.
+
+## Cấu trúc dự án
 
 - `frontend/`: ứng dụng React + Vite
-- `backend/`: server Express với SQLite để lưu dữ liệu đăng ký, analytics và ảnh upload
-
-## Cấu trúc
-
 - `frontend/src/`: mã nguồn React
-- `frontend/index.html`, `frontend/vite.config.js`: cấu hình frontend
-- `backend/index.js`: API server Express + SQLite
-- `backend/uploads/`: thư mục lưu ảnh upload
-- `backend/package.json`: phụ thuộc backend
+- `frontend/index.html`: trang HTML chính
+- `frontend/vite.config.js`: cấu hình Vite
+- `frontend/package.json`: phụ thuộc và script frontend
+- `package.json`: cấu hình workspace và script tiện ích
 
 ## Tính năng
-- Hero section, feature section, thông số kỹ thuật, form đăng ký nhận tin
-- Dark mode
-- Chat widget hỗ trợ trả lời nhanh
-- Frontend/backend phân tách rõ ràng
-- SEO meta tags cơ bản
-- Analytics gửi event tới backend
-- Lưu dữ liệu bằng SQLite
-- Hỗ trợ upload và lưu ảnh vào backend
+
+- Landing page React đơn giản
+- Sử dụng Vite để phát triển và build
+- Các component UI nằm trong `frontend/src/components`
 
 ## Chạy dự án
-1. `npm install`
-2. Từ thư mục gốc chạy `npm run dev` để khởi động cả frontend và backend cùng lúc
-3. Frontend mở tại `http://localhost:4173` hoặc `http://localhost:4174` nếu cổng 4173 đang bận
-4. Backend chạy ở `http://localhost:4000`
 
-## Chạy riêng từng phần (tùy chọn)
-- Frontend riêng: `npm run dev:frontend`
-- Backend riêng: `npm run dev:backend`
-- Build frontend: `npm run build`
-- Chạy backend riêng: `npm run start`
+1. Từ thư mục gốc chạy `npm install`
+2. Chạy `npm run dev`
+3. Mở trình duyệt tại `http://localhost:4173`
 
-## API chính
-- `POST /api/newsletter`
-- `POST /api/analytics`
-- `POST /api/ai-response`
-- `POST /api/upload-image`
-- `GET /api/images`
-- `GET /api/health`
+## Scripts chính
 
-## Cấu hình chatbot AI
-Chatbot hiện chỉ dùng dữ liệu trả lời nội bộ và không yêu cầu cấu hình API bên ngoài.
+- `npm run dev`: khởi động frontend Vite
+- `npm run dev:frontend`: tương tự `npm run dev`
+- `npm run build`: build frontend
+- `npm run start:frontend`: preview frontend tại `http://localhost:4173`
 
-Nếu bạn muốn thay đổi hành vi trả lời, chỉnh `backend/index.js` trong hàm `getAIResponse`.
+## Ghi chú
 
-> Không cần tạo `backend/.env` cho chatbot nếu bạn chỉ dùng tính năng mặc định.
+- Hiện tại dự án chỉ chứa phần frontend, không có backend riêng.
+- Nếu cần thêm backend hoặc API, hãy tạo thư mục và cấu hình phù hợp.
