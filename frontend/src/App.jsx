@@ -140,6 +140,12 @@ function App() {
   }, [darkMode]);
 
   useEffect(() => {
+    document.documentElement.classList.toggle('theme-dark', darkMode);
+    localStorage.setItem('smartvision-dark', darkMode);
+    sendAnalytics('theme-toggle', { darkMode });
+  }, [darkMode]);
+
+  useEffect(() => {
     const handleScroll = () => {
       sendAnalytics('scroll', { scrollY: window.scrollY });
       setHeroOffset(window.scrollY * 0.08);

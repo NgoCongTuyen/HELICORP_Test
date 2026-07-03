@@ -47,7 +47,7 @@ export default function ProductSection({ products, isLoading, favorites, cart, v
                   </div>
                 </div>
                 <button type="button" className="btn btn-primary product-add" onClick={() => onAddToCart(product.id)}>
-                  {cart.includes(product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
+                  {cart.some((item) => item.id === product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
                 </button>
               </article>
             ))
