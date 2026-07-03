@@ -1,6 +1,4 @@
-import React from 'react';
-
-function Navbar({ darkMode, onToggle, favoritesCount, cartCount, page, onShowFavorites, onShowCart }) {
+export default function Navbar({ darkMode, onToggle, favoritesCount, cartCount, page, onShowFavorites, onShowCart }) {
   return (
     <header className="topbar">
       <div className="brand">iPhone 16 Pro Max</div>
@@ -18,5 +16,3 @@ function Navbar({ darkMode, onToggle, favoritesCount, cartCount, page, onShowFav
     </header>
   );
 }
-
-export default React.memo(Navbar);

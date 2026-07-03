@@ -2,9 +2,7 @@ function formatPrice(value) {
   return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 }
 
-import React from 'react';
-
-function ProductSection({ products, isLoading, favorites, cart, viewed, onToggleFavorite, onAddToCart, onViewProduct, onShowCart, onShowFavorites }) {
+export default function ProductSection({ products, isLoading, favorites, cart, viewed, onToggleFavorite, onAddToCart, onViewProduct, onShowCart, onShowFavorites }) {
   return (
     <section className="section product-section">
       <div className="section-intro">
@@ -37,16 +35,7 @@ function ProductSection({ products, isLoading, favorites, cart, viewed, onToggle
             products.map((product) => (
               <article key={product.id} className="product-card animate-float" onMouseEnter={() => onViewProduct(product.name)}>
                 <div className="product-tag">{product.tag}</div>
-                {(() => {
-                  const base = product.image.split('/').pop().split('.')[0];
-                  return (
-                    <picture>
-                      <source type="image/avif" srcSet={`/images/optimized/${base}-320.avif 320w, /images/optimized/${base}-640.avif 640w, /images/optimized/${base}-1024.avif 1024w`} sizes="(max-width:600px) 100vw, 420px" />
-                      <source type="image/webp" srcSet={`/images/optimized/${base}-320.webp 320w, /images/optimized/${base}-640.webp 640w, /images/optimized/${base}-1024.webp 1024w`} sizes="(max-width:600px) 100vw, 420px" />
-                      <img className="product-image" src={`/images/optimized/${base}-640.webp`} alt={product.name} loading="lazy" decoding="async" />
-                    </picture>
-                  );
-                })()}
+                <img className="product-image" src={product.image} alt={product.name} />
                 <div className="product-copy">
                   <h3>{product.name}</h3>
                   <p>{product.description}</p>
@@ -58,7 +47,7 @@ function ProductSection({ products, isLoading, favorites, cart, viewed, onToggle
                   </div>
                 </div>
                 <button type="button" className="btn btn-primary product-add" onClick={() => onAddToCart(product.id)}>
-                  {cart.some((item) => item.id === product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
+                  {cart.includes(product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
                 </button>
               </article>
             ))
@@ -67,5 +56,3 @@ function ProductSection({ products, isLoading, favorites, cart, viewed, onToggle
     </section>
   );
 }
-
-export default React.memo(ProductSection);
