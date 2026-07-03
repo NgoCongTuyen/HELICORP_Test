@@ -10,10 +10,10 @@ import NewsletterForm from './components/NewsletterForm.jsx';
 import Footer from './components/Footer.jsx';
 
 const products = [
-  { id: 1, name: 'iPhone 16 Pro Max Edition', price: 32990000, description: 'Phiên bản cao cấp với chip A18 Pro và camera chuyên nghiệp.', tag: 'Hàng hot', image: '/images/iphone16.jpg' },
-  { id: 2, name: 'iPhone 16 Pro Midnight', price: 30990000, description: 'Màu Đen Midnight sang trọng, bộ nhớ 512GB.', tag: 'Đề xuất', image: '/images/thietke.png' },
-  { id: 3, name: 'iPhone 16 Pro Sand', price: 28990000, description: 'Phiên bản Sa Mạc với màu sắc ấn tượng và hiệu năng ổn định.', tag: 'Mới', image: '/images/manhinh.png' },
-  { id: 4, name: 'iPhone 16 Pro Starter', price: 24990000, description: 'Lựa chọn hợp lý cho người dùng cần thiết kế và hiệu năng tối ưu.', tag: 'Tiết kiệm', image: '/images/camera.png' },
+  { id: 1, name: 'iPhone 16 Pro Max Edition', price: 32990000, description: 'Phiên bản cao cấp với chip A18 Pro và camera chuyên nghiệp.', tag: 'Hàng hot', image: '/images/iphone.webp' },
+  { id: 2, name: 'iPhone 16 Pro Midnight', price: 30990000, description: 'Màu Đen Midnight sang trọng, bộ nhớ 512GB.', tag: 'Đề xuất', image: '/images/thietke.webp' },
+  { id: 3, name: 'iPhone 16 Pro Sand', price: 28990000, description: 'Phiên bản Sa Mạc với màu sắc ấn tượng và hiệu năng ổn định.', tag: 'Mới', image: '/images/manhinh.webp' },
+  { id: 4, name: 'iPhone 16 Pro Starter', price: 24990000, description: 'Lựa chọn hợp lý cho người dùng cần thiết kế và hiệu năng tối ưu.', tag: 'Tiết kiệm', image: '/images/camera.webp' },
 ];
 
 const features = [

@@ -10,7 +10,7 @@ export default function Navbar({ darkMode, onToggle, favoritesCount, cartCount, 
           🛒 Giỏ hàng {cartCount > 0 ? `(${cartCount})` : ''}
         </button>
       </div>
-      <button className="mode-toggle" onClick={onToggle}>
+      <button className="mode-toggle btn btn-secondary" type="button" onClick={onToggle}>
         {darkMode ? 'Light Mode' : 'Dark Mode'}
       </button>
     </header>

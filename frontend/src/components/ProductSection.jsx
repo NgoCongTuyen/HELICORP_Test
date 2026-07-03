@@ -2,7 +2,7 @@ function formatPrice(value) {
   return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 }
 
-export default function ProductSection({ products, isLoading, favorites, cart, viewed, onToggleFavorite, onAddToCart, onViewProduct, onShowCart, onShowFavorites }) {
+export default function ProductSection({ products, isLoading, favorites, cart, onToggleFavorite, onAddToCart, onViewProduct, onShowCart, onShowFavorites }) {
   return (
     <section className="section product-section">
       <div className="section-intro">
@@ -21,38 +21,42 @@ export default function ProductSection({ products, isLoading, favorites, cart, v
       </div>
 
       <div className="product-grid">
-          {isLoading ? (
-            Array.from({ length: 4 }).map((_, index) => (
-              <article key={index} className="product-card skeleton-card">
-                <div className="skeleton-image" />
-                <div className="skeleton-line short" />
-                <div className="skeleton-line" />
-                <div className="skeleton-line smaller" />
-                <div className="skeleton-button" />
-              </article>
-            ))
-          ) : (
-            products.map((product) => (
-              <article key={product.id} className="product-card animate-float" onMouseEnter={() => onViewProduct(product.name)}>
-                <div className="product-tag">{product.tag}</div>
-                <img className="product-image" src={product.image} alt={product.name} />
-                <div className="product-copy">
-                  <h3>{product.name}</h3>
-                  <p>{product.description}</p>
-                  <div className="product-meta">
-                    <strong>{formatPrice(product.price)}</strong>
-                    <button type="button" className={`icon-button ${favorites.includes(product.id) ? 'active' : ''}`} onClick={() => onToggleFavorite(product.id)}>
-                      ❤️
-                    </button>
-                  </div>
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <article key={index} className="product-card skeleton-card">
+              <div className="skeleton-image" />
+              <div className="skeleton-line short" />
+              <div className="skeleton-line" />
+              <div className="skeleton-line smaller" />
+              <div className="skeleton-button" />
+            </article>
+          ))
+        ) : (
+          products.map((product) => (
+            <article key={product.id} className="product-card animate-float" onMouseEnter={() => onViewProduct(product.name)}>
+              <div className="product-tag">{product.tag}</div>
+              <img className="product-image" src={product.image} alt={product.name} />
+              <div className="product-copy">
+                <h3>{product.name}</h3>
+                <p>{product.description}</p>
+                <div className="product-meta">
+                  <strong>{formatPrice(product.price)}</strong>
+                  <button
+                    type="button"
+                    className={`icon-button ${favorites.includes(product.id) ? 'active' : ''}`}
+                    onClick={() => onToggleFavorite(product.id)}
+                  >
+                    ❤️
+                  </button>
                 </div>
-                <button type="button" className="btn btn-primary product-add" onClick={() => onAddToCart(product.id)}>
-                  {cart.includes(product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
-                </button>
-              </article>
-            ))
-          )}
-        </div>
+              </div>
+              <button type="button" className="btn btn-primary product-add" onClick={() => onAddToCart(product.id)}>
+                {cart.includes(product.id) ? 'Đã thêm' : 'Thêm vào giỏ'}
+              </button>
+            </article>
+          ))
+        )}
+      </div>
     </section>
   );
 }

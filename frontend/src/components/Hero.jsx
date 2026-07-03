@@ -13,7 +13,7 @@ export default function Hero({ heroStyles }) {
       <div className="hero-card" aria-label="Phone preview">
         <div className="device-shell">
           <img
-            src="/images/iphone16.jpg"
+            src="/images/banner.webp"
             alt="iPhone 16 Pro Max"
             className="hero-image"
           />
