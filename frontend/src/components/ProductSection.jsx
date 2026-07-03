@@ -35,7 +35,7 @@ export default function ProductSection({ products, isLoading, favorites, cart, o
           products.map((product) => (
             <article key={product.id} className="product-card animate-float" onMouseEnter={() => onViewProduct(product.name)}>
               <div className="product-tag">{product.tag}</div>
-              <img className="product-image" src={product.image} alt={product.name} />
+              <img className="product-image" src={product.image} alt={product.name} width="640" height="400" loading="lazy" decoding="async" />
               <div className="product-copy">
                 <h3>{product.name}</h3>
                 <p>{product.description}</p>

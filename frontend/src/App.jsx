@@ -162,7 +162,7 @@ export default function App() {
                   if (!p) return null;
                   return (
                     <article key={p.id} className="product-card">
-                      <img className="product-image" src={p.image} alt={p.name} />
+                      <img className="product-image" src={p.image} alt={p.name} width="640" height="400" loading="lazy" decoding="async" />
                       <div className="product-copy">
                         <h3>{p.name}</h3>
                         <p>{p.description}</p>
@@ -197,7 +197,7 @@ export default function App() {
                   if (!p) return null;
                   return (
                     <article key={p.id} className="product-card">
-                      <img className="product-image" src={p.image} alt={p.name} />
+                      <img className="product-image" src={p.image} alt={p.name} width="640" height="400" loading="lazy" decoding="async" />
                       <div className="product-copy">
                         <h3>{p.name}</h3>
                         <p>{p.description}</p>
