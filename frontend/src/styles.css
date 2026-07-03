@@ -84,21 +84,63 @@ input {
 }
 
 .theme-dark .nav-button {
-  background: rgba(255, 255, 255, 0.08);
-  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
   border-color: rgba(148, 163, 184, 0.24);
 }
 
 .theme-dark .nav-button:hover,
 .theme-dark .nav-button.active {
-  background: rgba(56, 189, 248, 0.18);
+  background: rgba(56, 189, 248, 0.24);
   color: #ffffff;
-  border-color: rgba(56, 189, 248, 0.5);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.theme-dark .btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.24);
+}
+
+.theme-dark .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.theme-dark .btn-primary {
+  background: linear-gradient(135deg, #0f4c81, #0891b2);
+  color: #f8fafc;
+  box-shadow: 0 18px 40px rgba(14, 165, 233, 0.22);
 }
 
 .theme-dark .topbar {
-  background: rgba(2, 6, 23, 0.7);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(5, 12, 30, 0.92);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.theme-dark .product-card,
+.theme-dark .favorite-grid .product-card,
+.theme-dark .cart-grid .product-card {
+  background: rgba(15, 23, 42, 0.96);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.theme-dark .favorite-grid .product-image,
+.theme-dark .cart-grid .product-image {
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.theme-dark .quantity-control {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(148, 163, 184, 0.24);
+}
+
+.theme-dark .quantity-button {
+  background: rgba(148, 163, 184, 0.14);
+  color: #e2e8f0;
+}
+
+.theme-dark .quantity-button:hover {
+  background: rgba(56, 189, 248, 0.28);
 }
 
 .product-activity {
